@@ -117,8 +117,9 @@ export function CardStack({
   return (
     <div className="relative w-full max-w-2xl mx-auto flex flex-col h-[55vh] min-h-[340px] sm:h-[60vh] sm:min-h-[400px]">
       {/* Status row — streak progress on the left, session count on the right
-          (mobile only). On desktop the count is shown by the visual pile. */}
-      <div className="flex items-center justify-between gap-3 px-1 pb-2 sm:pb-3 shrink-0 min-h-[20px]">
+          (mobile only). Width matches the question card below (w-[88%] max-w-md)
+          so the edges line up. */}
+      <div className="w-[88%] max-w-md mx-auto flex items-center justify-between gap-3 pb-2 sm:pb-3 shrink-0 min-h-[20px]">
         <StreakHearts streak={streak} />
         {correctPile.length > 0 && (
           <div className="sm:hidden flex items-center gap-1.5 text-xs font-medium text-green-700 dark:text-green-400">
