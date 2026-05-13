@@ -29,20 +29,11 @@ export const metadata: Metadata = {
     title: siteTitle,
     description: siteDescription,
     locale: "de_DE",
-    images: [
-      {
-        url: "/badges/mausiii.png",
-        width: 400,
-        height: 600,
-        alt: "Mausiii",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: siteTitle,
     description: siteDescription,
-    images: ["/badges/mausiii.png"],
   },
 };
 
