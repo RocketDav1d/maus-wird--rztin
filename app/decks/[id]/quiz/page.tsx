@@ -41,15 +41,20 @@ export default async function QuizPage({
   return (
     <main className="flex-1 flex flex-col">
       <header className="border-b">
-        <div className="mx-auto w-full max-w-5xl px-6 py-3 flex items-center justify-between">
-          <Button asChild variant="ghost" size="sm">
-            <Link href={`/decks/${id}`}>
-              <ArrowLeft className="size-4" />
-              {deck.name}
+        <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 py-3 flex items-center justify-between gap-2">
+          <Button
+            asChild
+            variant="ghost"
+            size="sm"
+            className="min-w-0 [&>a]:min-w-0"
+          >
+            <Link href={`/decks/${id}`} className="flex items-center gap-1 min-w-0">
+              <ArrowLeft className="size-4 shrink-0" />
+              <span className="truncate">{deck.name}</span>
             </Link>
           </Button>
-          <div className="flex items-center gap-2">
-            <div className="text-xs text-muted-foreground">
+          <div className="flex items-center gap-2 shrink-0">
+            <div className="text-xs text-muted-foreground hidden sm:block">
               Training · {rows.length} Karten
             </div>
             <BadgesButton />

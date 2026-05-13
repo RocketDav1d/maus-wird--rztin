@@ -9,6 +9,7 @@ export function SignOutButton() {
         "use server";
         await signOut({ redirectTo: "/login" });
       }}
+      className="hidden sm:block"
     >
       <Button
         type="submit"

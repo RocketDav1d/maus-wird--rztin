@@ -32,9 +32,9 @@ export default async function DashboardPage() {
   return (
     <>
       <AppHeader />
-      <main className="mx-auto w-full max-w-5xl px-6 py-10 flex-1">
-        <div className="mb-10">
-          <h1 className="text-2xl font-semibold tracking-tight">
+      <main className="mx-auto w-full max-w-5xl px-4 sm:px-6 py-8 sm:py-10 flex-1">
+        <div className="mb-8 sm:mb-10">
+          <h1 className="text-xl sm:text-2xl font-semibold tracking-tight">
             Deine Karteikarten Sets 💛
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
@@ -59,7 +59,7 @@ export default async function DashboardPage() {
             </CardContent>
           </Card>
         ) : (
-          <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
+          <div className="grid gap-3 sm:gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
             {rows.map(({ deck, totalCards, approvedCards, correctCards }) => (
               <DeckCard
                 key={deck.id}

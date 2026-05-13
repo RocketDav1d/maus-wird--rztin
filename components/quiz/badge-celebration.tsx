@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { X } from "lucide-react";
 import type { Badge } from "@/lib/badges/registry";
 import { BadgeVisual } from "@/components/badges/badge-visual";
+import { cn } from "@/lib/utils";
 
 const AUTO_DISMISS_MS = 10_000;
 
@@ -18,8 +19,8 @@ const AUTO_DISMISS_MS = 10_000;
  *  5. On dismiss: badge flies to top-right (where the Badges button lives),
  *     backdrop fades out
  *
- * Designed to be motion-driven. The only words on screen are the badge title
- * (≤ 2 words) and one sentence describing the challenge.
+ * The final-boss badge (`doctor`) gets richer treatment: larger card + visual,
+ * gold ring, brighter halo, and a "FINALE" pre-label.
  */
 export function BadgeCelebration({
   badge,
@@ -32,6 +33,8 @@ export function BadgeCelebration({
   const [viewport, setViewport] = useState({ w: 0, h: 0 });
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const isFinal = !!badge?.final;
+
   useEffect(() => {
     const onResize = () =>
       setViewport({ w: window.innerWidth, h: window.innerHeight });
@@ -40,7 +43,6 @@ export function BadgeCelebration({
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
-  // Reset exit state + arm the 10s auto-dismiss whenever a new badge appears.
   useEffect(() => {
     setExiting(false);
     if (!badge) return;
@@ -54,7 +56,6 @@ export function BadgeCelebration({
     };
   }, [badge?.id]);
 
-  // ESC to dismiss
   useEffect(() => {
     if (!badge) return;
     const onKey = (e: KeyboardEvent) => {
@@ -71,6 +72,12 @@ export function BadgeCelebration({
 
   const targetX = viewport.w / 2 - 32;
   const targetY = -viewport.h / 2 + 36;
+
+  const visualSize = isFinal ? 220 : 160;
+  const haloSize = isFinal ? 720 : 480;
+  const haloGradient = isFinal
+    ? "radial-gradient(circle at center, rgba(252,211,77,0.7), rgba(252,211,77,0) 60%)"
+    : "radial-gradient(circle at center, rgba(255,200,80,0.45), rgba(255,200,80,0) 60%)";
 
   return (
     <AnimatePresence
@@ -92,29 +99,36 @@ export function BadgeCelebration({
             type="button"
             aria-label="Schließen"
             onClick={handleDismiss}
-            className="absolute inset-0 bg-black/55 backdrop-blur-sm cursor-default"
+            className={cn(
+              "absolute inset-0 backdrop-blur-sm cursor-default",
+              isFinal ? "bg-black/70" : "bg-black/55",
+            )}
           />
 
-          {/* Halo */}
+          {/* Halo — bigger and warmer for the final boss */}
           <motion.div
             aria-hidden
             className="absolute pointer-events-none"
             initial={{ scale: 0.6, opacity: 0 }}
             animate={{
-              scale: [0.6, 1.4, 1.2],
-              opacity: [0, 0.7, 0.35],
+              scale: isFinal ? [0.5, 1.5, 1.25, 1.35] : [0.6, 1.4, 1.2],
+              opacity: isFinal ? [0, 0.85, 0.55, 0.7] : [0, 0.7, 0.35],
             }}
-            transition={{ duration: 1.4, ease: "easeOut" }}
+            transition={{
+              duration: isFinal ? 2.4 : 1.4,
+              ease: "easeOut",
+              repeat: isFinal ? Infinity : 0,
+              repeatType: "mirror",
+            }}
             style={{
-              width: 480,
-              height: 480,
-              background:
-                "radial-gradient(circle at center, rgba(255,200,80,0.45), rgba(255,200,80,0) 60%)",
+              width: haloSize,
+              height: haloSize,
+              background: haloGradient,
               filter: "blur(8px)",
             }}
           />
 
-          {/* Card content */}
+          {/* Card */}
           <motion.div
             role="dialog"
             aria-modal="true"
@@ -137,13 +151,17 @@ export function BadgeCelebration({
             }}
             transition={{
               type: "spring",
-              stiffness: 220,
-              damping: 16,
+              stiffness: isFinal ? 180 : 220,
+              damping: isFinal ? 14 : 16,
               mass: 0.9,
             }}
-            className="relative flex flex-col items-center gap-5 px-8 py-7 rounded-3xl bg-background shadow-2xl border max-w-sm"
+            className={cn(
+              "relative flex flex-col items-center gap-5 rounded-3xl shadow-2xl border",
+              isFinal
+                ? "px-12 py-10 max-w-md bg-gradient-to-br from-amber-50 via-background to-amber-50 dark:from-amber-950/60 dark:via-background dark:to-amber-950/60 ring-2 ring-amber-400/60 shadow-amber-500/30"
+                : "px-8 py-7 max-w-sm bg-background",
+            )}
           >
-            {/* Dismiss X */}
             <button
               type="button"
               onClick={handleDismiss}
@@ -156,16 +174,16 @@ export function BadgeCelebration({
             <motion.div
               initial={{ scale: 0.9 }}
               animate={{
-                scale: [0.9, 1.12, 1],
-                rotate: [0, -4, 4, 0],
+                scale: isFinal ? [0.85, 1.2, 1.05, 1] : [0.9, 1.12, 1],
+                rotate: isFinal ? [0, -6, 6, -3, 0] : [0, -4, 4, 0],
               }}
               transition={{
-                duration: 1.1,
+                duration: isFinal ? 1.6 : 1.1,
                 ease: "easeOut",
-                times: [0, 0.55, 1],
+                times: isFinal ? [0, 0.4, 0.75, 1] : [0, 0.55, 1],
               }}
             >
-              <BadgeVisual badge={badge} size={160} />
+              <BadgeVisual badge={badge} size={visualSize} />
             </motion.div>
 
             <motion.div
@@ -174,13 +192,25 @@ export function BadgeCelebration({
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.35, duration: 0.35 }}
             >
-              <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-                Neues Badge
+              <div
+                className={cn(
+                  "text-[10px] uppercase tracking-[0.22em]",
+                  isFinal
+                    ? "text-amber-600 dark:text-amber-400 font-semibold"
+                    : "text-muted-foreground",
+                )}
+              >
+                {isFinal ? "Finale" : "Neues Badge"}
               </div>
-              <div className="text-xl font-semibold tracking-tight">
+              <div
+                className={cn(
+                  "font-semibold tracking-tight",
+                  isFinal ? "text-3xl" : "text-xl",
+                )}
+              >
                 {badge.title}
               </div>
-              <div className="text-sm text-muted-foreground max-w-[18rem]">
+              <div className="text-sm text-muted-foreground max-w-[20rem]">
                 {badge.description}
               </div>
             </motion.div>

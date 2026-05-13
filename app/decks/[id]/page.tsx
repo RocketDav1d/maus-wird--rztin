@@ -40,18 +40,20 @@ export default async function DeckDetailPage({
   return (
     <>
       <AppHeader />
-      <main className="mx-auto w-full max-w-5xl px-6 py-10 flex-1">
-        <header className="mb-8 flex items-start justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-semibold tracking-tight">{deck.name}</h1>
+      <main className="mx-auto w-full max-w-5xl px-4 sm:px-6 py-8 sm:py-10 flex-1">
+        <header className="mb-8 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-2xl font-semibold tracking-tight break-words">
+              {deck.name}
+            </h1>
             {deck.sourceFilename && (
-              <p className="text-sm text-muted-foreground mt-1">
+              <p className="text-sm text-muted-foreground mt-1 break-all">
                 {deck.sourceFilename} · {deck.totalPages} Seiten
               </p>
             )}
           </div>
           {deck.status === "ready" && usable.length > 0 && (
-            <Button asChild size="lg">
+            <Button asChild size="lg" className="w-full sm:w-auto shrink-0">
               <Link href={`/decks/${deck.id}/quiz`}>
                 <Play className="size-4" />
                 Training starten

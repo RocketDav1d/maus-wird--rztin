@@ -10,6 +10,7 @@ import {
 } from "motion/react";
 import { Info, X, Check, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { StreakHearts } from "./streak-hearts";
 
 export type Verdict = "correct" | "incorrect" | "incomplete";
 
@@ -37,6 +38,7 @@ const SWIPE_THRESHOLD = 120;
 export function CardStack({
   queue,
   correctPile,
+  streak,
   verdict,
   pulse,
   transcript,
@@ -50,6 +52,7 @@ export function CardStack({
 }: {
   queue: StackCard[];
   correctPile: StackCard[];
+  streak: number;
   verdict: Verdict | null;
   pulse: boolean;
   transcript: string | null;
@@ -112,29 +115,46 @@ export function CardStack({
   };
 
   return (
-    <div className="relative w-full max-w-2xl mx-auto h-[60vh] min-h-[400px]">
-      {/* Left pile of correct cards */}
-      <div className="absolute -left-2 top-1/2 -translate-y-1/2 pointer-events-none">
-        <div className="relative w-16 h-24">
-          {correctPile.slice(-4).map((c, i, arr) => (
-            <div
-              key={c.id}
-              className="absolute inset-0 rounded-md border border-green-500/60 bg-green-50 dark:bg-green-950/40 shadow-sm"
-              style={{
-                transform: `translate(${i * -2}px, ${i * -3}px) rotate(${(i - arr.length / 2) * -2}deg)`,
-                zIndex: i,
-              }}
+    <div className="relative w-full max-w-2xl mx-auto flex flex-col h-[55vh] min-h-[340px] sm:h-[60vh] sm:min-h-[400px]">
+      {/* Status row — streak progress on the left, session count on the right
+          (mobile only). On desktop the count is shown by the visual pile. */}
+      <div className="flex items-center justify-between gap-3 px-1 pb-2 sm:pb-3 shrink-0 min-h-[20px]">
+        <StreakHearts streak={streak} />
+        {correctPile.length > 0 && (
+          <div className="sm:hidden flex items-center gap-1.5 text-xs font-medium text-green-700 dark:text-green-400">
+            <span
+              aria-hidden
+              className="block size-2 rounded-sm bg-green-500/80"
             />
-          ))}
-          {correctPile.length > 0 && (
-            <div className="absolute -bottom-7 left-1/2 -translate-x-1/2 text-xs font-medium text-green-700 dark:text-green-400">
-              {correctPile.length}
-            </div>
-          )}
-        </div>
+            {correctPile.length} richtig
+          </div>
+        )}
       </div>
 
-      <div className="relative w-full h-full grid place-items-center">
+      {/* Card area */}
+      <div className="relative flex-1">
+        {/* Visual correct pile — desktop only. Mobile uses the inline count. */}
+        <div className="hidden sm:block absolute -left-2 top-1/2 -translate-y-1/2 pointer-events-none">
+          <div className="relative w-16 h-24">
+            {correctPile.slice(-4).map((c, i, arr) => (
+              <div
+                key={c.id}
+                className="absolute inset-0 rounded-md border border-green-500/60 bg-green-50 dark:bg-green-950/40 shadow-sm"
+                style={{
+                  transform: `translate(${i * -2}px, ${i * -3}px) rotate(${(i - arr.length / 2) * -2}deg)`,
+                  zIndex: i,
+                }}
+              />
+            ))}
+            {correctPile.length > 0 && (
+              <div className="absolute -bottom-7 left-1/2 -translate-x-1/2 text-xs font-medium text-green-700 dark:text-green-400">
+                {correctPile.length}
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="relative w-full h-full grid place-items-center">
         {under.map((c, i) => (
           <div
             key={c.id}
@@ -174,7 +194,7 @@ export function CardStack({
               style={{ x: dragX, y: dragY }}
               className={cn(
                 "relative w-[88%] max-w-md min-h-[68%] rounded-2xl border-2 bg-card shadow-xl",
-                "flex flex-col p-7 gap-4",
+                "flex flex-col p-5 sm:p-7 gap-3 sm:gap-4",
                 verdict ? BORDER_BY_VERDICT[verdict] : "border-border",
                 draggable && !verdict ? "cursor-grab active:cursor-grabbing" : "",
               )}
@@ -194,7 +214,7 @@ export function CardStack({
                 </div>
                 <StatusPill status={status} />
               </div>
-              <p className="text-lg sm:text-xl leading-relaxed font-medium relative z-10">
+              <p className="text-base sm:text-xl leading-relaxed font-medium relative z-10">
                 {top.questionDe}
               </p>
 
@@ -310,6 +330,7 @@ export function CardStack({
             <p className="text-lg font-medium">Keine Karten mehr.</p>
           </div>
         )}
+        </div>
       </div>
     </div>
   );

@@ -96,7 +96,7 @@ export function DeckCard({
         onClick={onDeleteClick}
         aria-label={`Stapel „${deck.name}“ löschen`}
         title="Stapel löschen"
-        className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity"
+        className="absolute bottom-2 right-2 opacity-70 sm:opacity-0 sm:group-hover:opacity-100 sm:focus-visible:opacity-100 transition-opacity"
       >
         <Trash2 className="size-4" />
       </Button>

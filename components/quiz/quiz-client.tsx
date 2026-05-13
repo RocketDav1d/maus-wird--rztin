@@ -13,7 +13,7 @@ import {
   type HitKeyPoint,
 } from "./card-stack";
 import { PushToTalk } from "./push-to-talk";
-import { StreakDots } from "./streak-dots";
+import { StreakHearts } from "./streak-hearts";
 import { BadgeCelebration } from "./badge-celebration";
 import { AdminControls } from "./admin-controls";
 import type { Badge } from "@/lib/badges/registry";
@@ -309,14 +309,11 @@ export function QuizClient({
   }));
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center gap-8 py-10 px-4">
-      <div className="flex items-center justify-center min-h-[14px]">
-        <StreakDots streak={streak} />
-      </div>
-
+    <div className="flex-1 flex flex-col items-center justify-center gap-6 sm:gap-8 py-6 sm:py-10 px-4">
       <CardStack
         queue={stackQueue}
         correctPile={stackPile}
+        streak={streak}
         verdict={verdict}
         pulse={pulse}
         transcript={transcript}

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -14,9 +14,46 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://mausiii.com";
+const siteTitle = "Mausi wird Ärztin 🐭";
+const siteDescription = "Süßes Prüfungstraining für meine Mausi.";
+
 export const metadata: Metadata = {
-  title: "Mausi wird Ärztin 🐭",
-  description: "Süßes Prüfungstraining für meine Mausi.",
+  metadataBase: new URL(siteUrl),
+  title: siteTitle,
+  description: siteDescription,
+  openGraph: {
+    type: "website",
+    url: siteUrl,
+    siteName: "Mausiii",
+    title: siteTitle,
+    description: siteDescription,
+    locale: "de_DE",
+    images: [
+      {
+        url: "/badges/mausiii.png",
+        width: 400,
+        height: 600,
+        alt: "Mausiii",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteTitle,
+    description: siteDescription,
+    images: ["/badges/mausiii.png"],
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
 };
 
 export default function RootLayout({

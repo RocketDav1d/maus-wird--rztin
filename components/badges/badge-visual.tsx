@@ -13,38 +13,46 @@ const ICON_MAP: Record<string, LucideIcon> = {
 };
 
 /**
- * Renders a single badge inside a square slot of `size` pixels.
+ * A badge rendered inside a square slot of exactly `size` × `size` pixels.
+ * The slot is `overflow-hidden` so the rendered visual can NEVER bleed past
+ * its boundaries, regardless of source-image aspect ratio.
  *
- *  - sticker: `object-contain` preserves the PNG's native aspect ratio (the
- *    Maus sticker pack is portrait-oriented, so without contain it would
- *    stretch into the square slot)
- *  - icon: gradient disc at 78% of the slot so its visual mass matches the
- *    sticker character (which has transparent margins around it)
+ *  - sticker: Next.js Image with `fill` + `object-fit: contain` so the PNG
+ *    keeps its native aspect ratio inside the slot
+ *  - icon:    gradient disc at 78% of the slot for visual balance with the
+ *    sticker character (which has transparent margin around it)
  */
 export function BadgeVisual({
   badge,
-  size = 120,
+  size = 100,
   locked = false,
 }: {
   badge: Badge;
   size?: number;
   locked?: boolean;
 }) {
+  const slotStyle: React.CSSProperties = {
+    width: `${size}px`,
+    height: `${size}px`,
+    flexShrink: 0,
+  };
+
   if (badge.visual.type === "sticker") {
     return (
       <div
-        className="relative grid place-items-center"
-        style={{ width: size, height: size }}
+        style={slotStyle}
+        className="relative overflow-hidden"
       >
         <Image
           src={stickerPath(badge.visual.file)}
           alt=""
-          width={size}
-          height={size}
-          draggable={false}
+          fill
+          sizes={`${size}px`}
           priority={!locked}
+          draggable={false}
+          style={{ objectFit: "contain" }}
           className={cn(
-            "select-none object-contain w-full h-full",
+            "select-none",
             locked ? "opacity-25 grayscale" : "drop-shadow-sm",
           )}
         />
@@ -57,8 +65,8 @@ export function BadgeVisual({
   const iconSize = Math.round(size * 0.36);
   return (
     <div
-      className="grid place-items-center"
-      style={{ width: size, height: size }}
+      style={slotStyle}
+      className="grid place-items-center overflow-hidden"
     >
       <div
         className={cn(
@@ -66,12 +74,12 @@ export function BadgeVisual({
           badge.visual.gradient,
           locked ? "opacity-25 grayscale" : "shadow-md shadow-black/10",
         )}
-        style={{ width: discSize, height: discSize }}
+        style={{ width: `${discSize}px`, height: `${discSize}px` }}
       >
         {Icon && (
           <Icon
             className="text-white drop-shadow"
-            style={{ width: iconSize, height: iconSize }}
+            style={{ width: `${iconSize}px`, height: `${iconSize}px` }}
             strokeWidth={2.2}
           />
         )}
