@@ -146,7 +146,7 @@ export const tripStops: TripStop[] = [
         time: "Vormittag",
         title: "Boot ab Puntaldia",
         detail:
-          "Privat oder kleine Gruppe, Skipper inklusive, lieber vier Stunden als zu langer Ganztag.",
+          "Privates Boot mit Skipper, lieber vier Stunden als zu langer Ganztag.",
       },
       {
         time: "Auf dem Wasser",
@@ -395,7 +395,7 @@ export const tripBookings: TripBooking[] = [
     title: "Tavolara & Molara Boot",
     timing: "Tag 3 · Vormittag",
     priority: "hoch",
-    note: "Wetterabhängig halten, lieber kleine Gruppe oder privat.",
+    note: "Wetterabhängig halten, am besten privat mit Skipper.",
   },
   {
     id: "spa",

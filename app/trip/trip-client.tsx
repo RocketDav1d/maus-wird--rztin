@@ -16,6 +16,7 @@ import {
   Dumbbell,
   GripHorizontal,
   Heart,
+  Map as MapIcon,
   MapPin,
   Martini,
   Plane,
@@ -99,6 +100,7 @@ export function TripClient() {
   const [checkedIds, setCheckedIds] = useState<string[]>([]);
   const [hasLoadedChecklist, setHasLoadedChecklist] = useState(false);
   const [hasOpenedPass, setHasOpenedPass] = useState(false);
+  const [isMobileMapOpen, setIsMobileMapOpen] = useState(false);
   const panelScrollRef = useRef<HTMLDivElement>(null);
 
   const selectedIndex = Math.max(
@@ -161,6 +163,7 @@ export function TripClient() {
     setSelectedId(id);
     setView("agenda");
     setAgendaMode("detail");
+    setIsMobileMapOpen(false);
   }
 
   function moveSelection(offset: number, nextMode: AgendaMode = "detail") {
@@ -173,6 +176,7 @@ export function TripClient() {
   function handleViewChange(next: string) {
     const nextView = next as TripView;
     setView(nextView);
+    setIsMobileMapOpen(false);
     if (nextView === "agenda" && view !== "agenda") {
       setAgendaMode("overview");
     }
@@ -231,7 +235,10 @@ export function TripClient() {
             <MapControls
               position="top-right"
               showCompass
-              className="right-4 top-24 hidden md:flex"
+              className={cn(
+                "right-4 top-24",
+                isMobileMapOpen ? "flex" : "hidden md:flex",
+              )}
             />
           </MapCanvas>
           <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-[linear-gradient(180deg,rgba(255,248,251,0.78),rgba(255,248,251,0))]" />
@@ -274,7 +281,12 @@ export function TripClient() {
             </TabsList>
           </div>
 
-          <aside className="pointer-events-auto mt-14 flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-[#ffd2e1] bg-white/95 shadow-[0_20px_70px_rgba(255,95,147,0.16)] backdrop-blur-xl dark:border-border dark:bg-card/94 md:w-[480px] lg:mt-0 lg:w-[500px]">
+          <aside
+            className={cn(
+              "pointer-events-auto mt-14 flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-[#ffd2e1] bg-white/95 shadow-[0_20px_70px_rgba(255,95,147,0.16)] backdrop-blur-xl dark:border-border dark:bg-card/94 md:w-[480px] lg:mt-0 lg:w-[500px]",
+              isMobileMapOpen && "hidden lg:flex",
+            )}
+          >
             <div
               ref={panelScrollRef}
               className="min-h-0 flex-1 overflow-y-auto p-4 pb-6 md:p-5 md:pb-6"
@@ -288,6 +300,7 @@ export function TripClient() {
                   selectedIndex={selectedIndex}
                   onAdvance={() => moveSelection(1)}
                   onPrevious={() => moveSelection(-1)}
+                  onOpenMap={() => setIsMobileMapOpen(true)}
                   onOpenDetail={openStopDetail}
                   onBackToOverview={() => setAgendaMode("overview")}
                   onSelectStop={selectStop}
@@ -306,6 +319,20 @@ export function TripClient() {
               {view === "pass" && <PassPanel />}
             </div>
           </aside>
+
+          {isMobileMapOpen && view === "agenda" && (
+            <div className="pointer-events-auto absolute inset-x-4 bottom-12 z-20 flex justify-center lg:hidden">
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => setIsMobileMapOpen(false)}
+                className="border border-[#ffd2e1] bg-white/92 text-[#c72e68] shadow-[0_14px_36px_rgba(36,52,71,0.18)] backdrop-blur hover:bg-white"
+              >
+                <CalendarDays className="size-4" />
+                Agenda öffnen
+              </Button>
+            </div>
+          )}
         </div>
       </Tabs>
 
@@ -957,6 +984,7 @@ function AgendaMapPanel({
   selectedIndex,
   onAdvance,
   onPrevious,
+  onOpenMap,
   onOpenDetail,
   onBackToOverview,
   onSelectStop,
@@ -966,6 +994,7 @@ function AgendaMapPanel({
   selectedIndex: number;
   onAdvance: () => void;
   onPrevious: () => void;
+  onOpenMap: () => void;
   onOpenDetail: (id: string) => void;
   onBackToOverview: () => void;
   onSelectStop: (id: string) => void;
@@ -1020,18 +1049,30 @@ function AgendaMapPanel({
               Tag {selectedIndex + 1}: {selectedStop.title}
             </div>
           </div>
-          <Button
-            type="button"
-            size="sm"
-            variant="secondary"
-            onClick={() => {
-              onAdvance();
-            }}
-            className="shrink-0 border border-[#ffd2e1] bg-white/80 text-[#c72e68] hover:bg-white"
-          >
-            Öffnen
-            <ChevronRight className="size-4" />
-          </Button>
+          <div className="flex shrink-0 gap-2">
+            <Button
+              type="button"
+              size="sm"
+              variant="secondary"
+              onClick={onOpenMap}
+              className="border border-[#ffd2e1] bg-white/80 text-[#c72e68] hover:bg-white lg:hidden"
+            >
+              <MapIcon className="size-4" />
+              Karte
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant="secondary"
+              onClick={() => {
+                onOpenDetail(selectedStop.id);
+              }}
+              className="border border-[#ffd2e1] bg-white/80 text-[#c72e68] hover:bg-white"
+            >
+              Öffnen
+              <ChevronRight className="size-4" />
+            </Button>
+          </div>
         </div>
       </div>
 
