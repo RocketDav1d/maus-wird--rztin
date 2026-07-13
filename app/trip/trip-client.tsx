@@ -227,22 +227,46 @@ export function TripClient() {
               </div>
             </div>
 
-            <TabsList className="h-9 border border-[#ffd2e1] bg-white/92 shadow-sm ring-1 ring-[#ff8ab3]/15 backdrop-blur dark:bg-card/88 dark:ring-white/10">
-              <TabsTrigger value="map" className="px-2.5 sm:px-3">
+            <TabsList className="grid h-9 w-full max-w-full grid-cols-4 border border-[#ffd2e1] bg-white/92 shadow-sm ring-1 ring-[#ff8ab3]/15 backdrop-blur dark:bg-card/88 dark:ring-white/10 min-[390px]:inline-flex min-[390px]:w-fit">
+              <TabsTrigger
+                value="map"
+                aria-label="Karte"
+                className="min-w-0 px-1.5 min-[390px]:px-2.5 sm:px-3"
+              >
                 <MapIcon className="size-4" />
-                Karte
+                <span className="sr-only min-[390px]:not-sr-only">
+                  Karte
+                </span>
               </TabsTrigger>
-              <TabsTrigger value="agenda" className="px-2.5 sm:px-3">
+              <TabsTrigger
+                value="agenda"
+                aria-label="Agenda"
+                className="min-w-0 px-1.5 min-[390px]:px-2.5 sm:px-3"
+              >
                 <CalendarDays className="size-4" />
-                Agenda
+                <span className="sr-only min-[390px]:not-sr-only">
+                  Agenda
+                </span>
               </TabsTrigger>
-              <TabsTrigger value="bookings" className="px-2.5 sm:px-3">
+              <TabsTrigger
+                value="bookings"
+                aria-label="Buchen"
+                className="min-w-0 px-1.5 min-[390px]:px-2.5 sm:px-3"
+              >
                 <ClipboardList className="size-4" />
-                Buchen
+                <span className="sr-only min-[390px]:not-sr-only">
+                  Buchen
+                </span>
               </TabsTrigger>
-              <TabsTrigger value="pass" className="px-2.5 sm:px-3">
+              <TabsTrigger
+                value="pass"
+                aria-label="Pass"
+                className="min-w-0 px-1.5 min-[390px]:px-2.5 sm:px-3"
+              >
                 <Ticket className="size-4" />
-                Pass
+                <span className="sr-only min-[390px]:not-sr-only">
+                  Pass
+                </span>
               </TabsTrigger>
             </TabsList>
           </div>
@@ -377,40 +401,40 @@ function BoardingPassIntro({ onOpen }: { onOpen: () => void }) {
       <div className="relative w-full max-w-[720px]">
         <div className="absolute -inset-10 rounded-full bg-[#ff5f93]/12 blur-3xl" />
         <div className="relative text-center">
-          <div className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full border border-[#ffd2e1] bg-white/86 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#c72e68] shadow-sm backdrop-blur">
+          <div className="mx-auto mb-3 inline-flex items-center gap-2 rounded-full border border-[#ffd2e1] bg-white/86 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#c72e68] shadow-sm backdrop-blur sm:mb-4">
             <Ticket className="size-3.5" />
             Birthday Boarding
           </div>
         </div>
 
         <div className="relative mx-auto overflow-visible rounded-xl shadow-[0_28px_90px_rgba(255,95,147,0.22)]">
-          <div className="relative z-10 overflow-hidden rounded-t-xl border border-b-0 border-[#ffb8cf] bg-[linear-gradient(135deg,#ffffff_0%,#fff7fb_58%,#effbff_100%)] p-5 sm:p-7">
+          <div className="relative z-10 overflow-hidden rounded-t-xl border border-b-0 border-[#ffb8cf] bg-[linear-gradient(135deg,#ffffff_0%,#fff7fb_58%,#effbff_100%)] p-4 sm:p-7">
             <div className="flex items-center justify-between gap-3">
-              <span className="text-sm font-bold uppercase tracking-[0.36em] text-[#ff4f8b] sm:text-base">
+              <span className="text-xs font-bold uppercase tracking-[0.28em] text-[#ff4f8b] sm:text-base sm:tracking-[0.36em]">
                 Birthday Pass
               </span>
               <Sun className="size-5 text-[#ffb33f]" />
             </div>
 
-            <div className="mt-7 grid grid-cols-[1fr_auto_1fr] items-end gap-4 sm:mt-9 sm:gap-6">
-              <div>
+            <div className="mt-5 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-end gap-2 sm:mt-9 sm:gap-6">
+              <div className="min-w-0">
                 <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[#7b8aa5] sm:text-sm">
                   From
                 </div>
-                <div className="mt-2 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
+                <div className="mt-2 text-2xl font-semibold leading-tight tracking-tight min-[360px]:text-3xl sm:text-4xl">
                   Long
                   <br />
                   Distance
                 </div>
               </div>
               <div className="grid place-items-center pb-2">
-                <Heart className="size-7 text-[#ff5f93]" />
+                <Heart className="size-6 text-[#ff5f93] sm:size-7" />
               </div>
-              <div className="text-right">
+              <div className="min-w-0 text-right">
                 <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[#7b8aa5] sm:text-sm">
                   To
                 </div>
-                <div className="mt-2 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
+                <div className="mt-2 text-2xl font-semibold leading-tight tracking-tight min-[360px]:text-3xl sm:text-4xl">
                   Love
                   <br />
                   Forever
@@ -418,14 +442,14 @@ function BoardingPassIntro({ onOpen }: { onOpen: () => void }) {
               </div>
             </div>
 
-            <div className="mt-8 grid grid-cols-3 gap-2 sm:gap-3">
+            <div className="mt-6 grid grid-cols-3 gap-2 sm:mt-8 sm:gap-3">
               <IntroPassField label="Gate" value="OLB" />
               <IntroPassField label="Seat" value="2A+2B" />
               <IntroPassField label="Mode" value="Mausi" />
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-b-xl border border-t-0 border-[#ffb8cf] bg-[linear-gradient(135deg,#fff8fb,#edfaff)] px-5 pb-7 pt-14 sm:px-7 sm:pb-8 sm:pt-16">
+          <div className="relative overflow-hidden rounded-b-xl border border-t-0 border-[#ffb8cf] bg-[linear-gradient(135deg,#fff8fb,#edfaff)] px-4 pb-5 pt-10 sm:px-7 sm:pb-8 sm:pt-16">
             <div
               className="pointer-events-none absolute inset-x-0 top-0 z-20 h-12 -translate-y-1/2"
               aria-hidden
@@ -445,9 +469,9 @@ function BoardingPassIntro({ onOpen }: { onOpen: () => void }) {
                 <Image
                   src={tripStickerSrc}
                   alt=""
-                  width={140}
-                  height={140}
-                  className="relative mx-auto w-24 drop-shadow-[0_16px_24px_rgba(199,46,104,0.24)] sm:w-28"
+                  width={128}
+                  height={192}
+                  className="relative mx-auto h-auto w-24 drop-shadow-[0_16px_24px_rgba(199,46,104,0.24)] sm:w-28"
                 />
                 <div className="relative mt-2 text-xs font-bold uppercase tracking-[0.22em] text-[#ff4f8b]">
                   Mausi Map
@@ -470,7 +494,7 @@ function BoardingPassIntro({ onOpen }: { onOpen: () => void }) {
                   openPass();
                 }
               }}
-              className="relative z-10 block w-full cursor-grab rounded-lg border border-[#ffb8cf] bg-white/94 px-4 py-4 text-left shadow-[0_18px_46px_rgba(36,52,71,0.14)] outline-none transition focus-visible:ring-3 focus-visible:ring-[#ff8ab3]/35 active:cursor-grabbing"
+              className="relative z-10 block w-full cursor-grab rounded-lg border border-[#ffb8cf] bg-white/94 px-3 py-3 text-left shadow-[0_18px_46px_rgba(36,52,71,0.14)] outline-none transition focus-visible:ring-3 focus-visible:ring-[#ff8ab3]/35 active:cursor-grabbing sm:px-4 sm:py-4"
               style={{
                 transform: `translate3d(0, ${lowerOffset}px, 0) rotate(${lowerRotation}deg)`,
                 transformOrigin: "50% 0%",
@@ -481,7 +505,7 @@ function BoardingPassIntro({ onOpen }: { onOpen: () => void }) {
               }}
               aria-label="Unteren Teil des Birthday Pass öffnen"
             >
-              <div className="mb-4 flex items-center justify-between gap-4">
+              <div className="mb-3 flex items-center justify-between gap-4 sm:mb-4">
                 <div className="font-mono text-xs uppercase tracking-[0.22em] text-[#7b8aa5]">
                   DL-MAUS-2026
                 </div>
@@ -492,13 +516,13 @@ function BoardingPassIntro({ onOpen }: { onOpen: () => void }) {
               </div>
 
               <div className="flex min-w-0 items-center gap-3">
-                <div className="h-11 min-w-0 flex-1 rounded-sm bg-[repeating-linear-gradient(90deg,#243447_0_4px,transparent_4px_8px,#243447_8px_11px,transparent_11px_17px)] opacity-80" />
+                <div className="h-9 min-w-0 flex-1 rounded-sm bg-[repeating-linear-gradient(90deg,#243447_0_4px,transparent_4px_8px,#243447_8px_11px,transparent_11px_17px)] opacity-80 sm:h-11" />
                 <div className="shrink-0 rounded-md border border-dashed border-[#ff8ab3]/55 bg-white/70 px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#c72e68]">
                   Valid
                 </div>
               </div>
 
-              <div className="mt-4 flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#7b8aa5]">
+              <div className="mt-3 flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#7b8aa5] sm:mt-4">
                 <GripHorizontal className="size-4 text-[#ff8ab3]" />
                 Ticketkante
               </div>
@@ -641,8 +665,8 @@ function MausiMapSticker({
             src={tripStickerSrc}
             alt="Mausi Sticker auf der Karte"
             width={96}
-            height={96}
-            className="relative z-10 w-16 drop-shadow-[0_12px_18px_rgba(199,46,104,0.28)] sm:w-20"
+            height={144}
+            className="relative z-10 h-auto w-16 drop-shadow-[0_12px_18px_rgba(199,46,104,0.28)] sm:w-20"
           />
         </button>
       </MarkerContent>
@@ -797,8 +821,8 @@ function MausiJourneyCue({
         src={tripStickerSrc}
         alt=""
         width={56}
-        height={56}
-        className="w-12 shrink-0 drop-shadow-[0_10px_16px_rgba(199,46,104,0.2)]"
+        height={84}
+        className="h-auto w-12 shrink-0 drop-shadow-[0_10px_16px_rgba(199,46,104,0.2)]"
       />
       <div className="min-w-0 flex-1">
         <div className="text-[0.68rem] font-bold uppercase tracking-[0.16em] text-[#ff4f8b]">
@@ -914,8 +938,8 @@ function AgendaPanel({
             src={tripStickerSrc}
             alt=""
             width={48}
-            height={48}
-            className="w-10 shrink-0 drop-shadow-[0_8px_14px_rgba(199,46,104,0.2)]"
+            height={72}
+            className="h-auto w-10 shrink-0 drop-shadow-[0_8px_14px_rgba(199,46,104,0.2)]"
           />
           <div className="min-w-0 flex-1">
             <div className="text-[0.66rem] font-bold uppercase tracking-[0.16em] text-[#ff4f8b]">
@@ -983,8 +1007,8 @@ function AgendaPanel({
                     src={tripStickerSrc}
                     alt=""
                     width={44}
-                    height={44}
-                    className="absolute -left-1 top-14 z-20 w-10 -rotate-6 drop-shadow-[0_8px_14px_rgba(199,46,104,0.24)]"
+                    height={66}
+                    className="absolute -left-1 top-14 z-20 h-auto w-10 -rotate-6 drop-shadow-[0_8px_14px_rgba(199,46,104,0.24)]"
                   />
                 )}
                 <span
@@ -1179,8 +1203,8 @@ function MausiSceneCard() {
         src={tripStickerSrc}
         alt="Mausi Sticker"
         width={190}
-        height={190}
-        className="absolute bottom-5 right-5 w-32 drop-shadow-[0_18px_28px_rgba(199,46,104,0.25)] sm:w-36"
+        height={285}
+        className="absolute bottom-5 right-5 h-auto w-32 drop-shadow-[0_18px_28px_rgba(199,46,104,0.25)] sm:w-36"
       />
       <div className="absolute bottom-5 left-4 max-w-56">
         <div className="text-xs font-bold uppercase tracking-[0.2em] text-[#ff4f8b]">
