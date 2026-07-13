@@ -132,4 +132,13 @@
     text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
   }
+  .maplibregl-popup-content {
+    @apply bg-transparent! shadow-none! p-0! rounded-none!;
+  }
+  .maplibregl-popup-tip {
+    @apply hidden!;
+  }
+  .maplibregl-marker {
+    z-index: 2;
+  }
 }
