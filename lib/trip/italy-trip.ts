@@ -57,12 +57,12 @@ export const tripStops: TripStop[] = [
     title: "Ankommen im Due Lune",
     place: "Puntaldia",
     type: "arrival",
-    pace: "kein Programm",
+    pace: "ankommen",
     lng: 9.681,
     lat: 40.817,
     eyebrow: "Hoteltransfer, Pool, Privatstrand, erster Aperitivo",
     summary:
-      "Der Start bleibt weich: Transfer ab Olbia, ein erster Gang durch Resort und Marina, danach Luna Nuova und Blue Moon ohne Taxi oder Zeitdruck.",
+      "Der Start bleibt leicht: Transfer ab Olbia, ein erster Gang durch Resort und Marina, danach Luna Nuova und Blue Moon ohne Taxi oder Zeitdruck.",
     imageSrc: "/trip/la-maddalena-pool.jpg",
     imageAlt: "Pool- und Aperitifstimmung in Sardinien",
     plan: [
@@ -70,7 +70,7 @@ export const tripStops: TripStop[] = [
         time: "Nachmittag",
         title: "Transfer & Check-in",
         detail:
-          "Vom Flughafen Olbia direkt nach Puntaldia, Koffer abstellen und erstmal nichts Großes wollen.",
+          "Vom Flughafen Olbia direkt nach Puntaldia, Koffer abstellen und erst einmal nichts beweisen müssen.",
       },
       {
         time: "Später",
@@ -87,7 +87,7 @@ export const tripStops: TripStop[] = [
     ],
     logistics: "Hoteltransfer statt Mietwagen. Ankommen ist der Plan.",
     booking: "Transfer über das Resort anfragen.",
-    keepsake: "Boarding Pass + erstes Mausi-Foto am Wasser",
+    keepsake: "Boarding Pass und erstes Mausi-Foto am Wasser",
   },
   {
     id: "puntaldia-harbour",
@@ -125,7 +125,7 @@ export const tripStops: TripStop[] = [
     ],
     logistics: "Alles in Laufnähe. Für Il Marino Terrasse/Hafenblick anfragen.",
     booking: "Il Marino für den zweiten Abend reservieren.",
-    keepsake: "Kleine Rechnung oder Foto von der Marina",
+    keepsake: "Hafenfoto, Aperitifglas, Tavolara im Hintergrund",
   },
   {
     id: "tavolara-molara",
@@ -156,7 +156,7 @@ export const tripStops: TripStop[] = [
       },
       {
         time: "Nachmittag",
-        title: "Runterfahren",
+        title: "Zurück in den Resort-Modus",
         detail:
           "Zurück ins Resort, spätes Mittagessen, Pool und ein einfacher Abend.",
       },
@@ -185,7 +185,7 @@ export const tripStops: TripStop[] = [
         time: "09:30",
         title: "Los ab Puntaldia",
         detail:
-          "Kleinwagen direkt am Hotel übernehmen, ohne sieben Tage Parkplatzthema.",
+          "Kleinwagen direkt am Hotel übernehmen, ohne sieben Tage Auto mitzuschleppen.",
       },
       {
         time: "10:00",
@@ -197,7 +197,7 @@ export const tripStops: TripStop[] = [
         time: "15:00",
         title: "Lu Impostu oder Cala Brandinchi",
         detail:
-          "Je nach Reservierung und Füllung: zweiter Badestopp, danach Rückgabe.",
+          "Je nach Reservierung und Tageslage: zweiter Badestopp, danach Rückgabe.",
       },
     ],
     logistics:
@@ -211,7 +211,7 @@ export const tripStops: TripStop[] = [
     title: "Spa & Gusto by Sadler",
     place: "Due Lune · Baglioni Resort",
     type: "spa",
-    pace: "luxus, aber ruhig",
+    pace: "ruhiger Luxus",
     lng: 9.6761,
     lat: 40.8219,
     eyebrow: "Private Spa, Paarmassage, Fine Dining",
@@ -222,7 +222,7 @@ export const tripStops: TripStop[] = [
     plan: [
       {
         time: "Vormittag",
-        title: "Nichts Großes",
+        title: "Sehr wenig vorhaben",
         detail:
           "Ausschlafen, Frühstück, Pool oder Strand und leichter Lunch.",
       },
@@ -236,7 +236,7 @@ export const tripStops: TripStop[] = [
         time: "Abend",
         title: "Gusto by Sadler",
         detail:
-          "Fine Dining per vorgebuchtem NCC. À la carte reicht, der Abend soll besonders bleiben, nicht steif.",
+          "Fine Dining per vorgebuchtem NCC. À la carte reicht, der Abend soll besonders bleiben, nicht zu formell.",
       },
     ],
     logistics:
@@ -250,7 +250,7 @@ export const tripStops: TripStop[] = [
     title: "Pooltag & Clubabend",
     place: "San Teodoro",
     type: "club",
-    pace: "spät, aber kontrolliert",
+    pace: "später Abend",
     lng: 9.673,
     lat: 40.773,
     eyebrow: "Bal Harbour, optional Luna Glam Club",
@@ -273,7 +273,7 @@ export const tripStops: TripStop[] = [
       },
       {
         time: "00:15",
-        title: "Luna Glam optional",
+        title: "Luna Glam, wenn es passt",
         detail:
           "Wenn der Kalender passt: richtiger Club für zwei bis drei Stunden, Rückfahrt fix buchen.",
       },
@@ -327,7 +327,7 @@ export const tripStops: TripStop[] = [
     title: "Letzter Morgen",
     place: "Puntaldia · Olbia",
     type: "departure",
-    pace: "kein Zusatzplan",
+    pace: "leicht abreisen",
     lng: 9.5176,
     lat: 40.8987,
     eyebrow: "Frühstück, letztes Bad, Transfer",
@@ -377,7 +377,7 @@ export const tripChecklist = [
   { id: "boat", label: "Boot Tavolara/Molara mit Skipper" },
   { id: "spa", label: "Private Spa + Paarmassage" },
   { id: "gusto", label: "Gusto by Sadler + NCC" },
-  { id: "club", label: "Bal Harbour / Luna Glam Kalender" },
+  { id: "club", label: "Bal Harbour / Luna Glam Eventabend" },
   { id: "portolano", label: "Il Portolano Außentisch" },
   { id: "car", label: "1 Mietwagentag mit Hotelzustellung" },
 ];
@@ -395,7 +395,7 @@ export const tripBookings: TripBooking[] = [
     title: "Tavolara & Molara Boot",
     timing: "Tag 3 · Vormittag",
     priority: "hoch",
-    note: "Wetterabhaengig halten, lieber kleine Gruppe oder privat.",
+    note: "Wetterabhängig halten, lieber kleine Gruppe oder privat.",
   },
   {
     id: "spa",
@@ -409,7 +409,7 @@ export const tripBookings: TripBooking[] = [
     title: "Bal Harbour / Luna Glam",
     timing: "Tag 6 · Nacht",
     priority: "mittel",
-    note: "Eventkalender abwarten, Rückfahrt für 02:30/03:00 sichern.",
+    note: "Eventkalender abwarten, Gästeliste oder Tickets und Rückfahrt zusammen sichern.",
   },
   {
     id: "brandinchi",

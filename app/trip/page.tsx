@@ -8,8 +8,8 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { TripClient } from "./trip-client";
 
 export const metadata = {
-  title: "Mausi Map · Mausi App",
-  description: "Eine kleine Geburtstagsreise als Kartenplanung.",
+  title: "Mausi in Puntaldia · Geburtstagsreise",
+  description: "Eine kleine Sardinien-Reise mit Agenda, Karte und Birthday Pass.",
 };
 
 export default async function TripPage() {
