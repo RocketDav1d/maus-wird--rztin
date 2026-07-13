@@ -12,13 +12,14 @@ import {
   ChevronRight,
   Circle,
   ClipboardList,
+  Download,
   Dumbbell,
   GripHorizontal,
   Heart,
-  Map as MapIcon,
   MapPin,
   Martini,
   Plane,
+  Printer,
   Sailboat,
   ShipWheel,
   Sparkles,
@@ -55,7 +56,8 @@ import {
 
 const checklistStorageKey = "mausi-puntaldia-checklist-v1";
 
-type TripView = "map" | "agenda" | "bookings" | "pass";
+type TripView = "agenda" | "pass" | "bookings";
+type AgendaMode = "overview" | "detail";
 
 const typeIcons: Record<TripStopType, LucideIcon> = {
   arrival: Plane,
@@ -85,11 +87,13 @@ const introOpenThreshold = 0.76;
 const introExitDelayMs = 620;
 
 export function TripClient() {
-  const [view, setView] = useState<TripView>("map");
+  const [view, setView] = useState<TripView>("agenda");
+  const [agendaMode, setAgendaMode] = useState<AgendaMode>("overview");
   const [selectedId, setSelectedId] = useState(tripStops[0]?.id);
   const [checkedIds, setCheckedIds] = useState<string[]>([]);
   const [hasLoadedChecklist, setHasLoadedChecklist] = useState(false);
   const [hasOpenedPass, setHasOpenedPass] = useState(false);
+  const panelScrollRef = useRef<HTMLDivElement>(null);
 
   const selectedIndex = Math.max(
     0,
@@ -125,6 +129,10 @@ export function TripClient() {
     );
   }, [checkedIds, hasLoadedChecklist]);
 
+  useEffect(() => {
+    panelScrollRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+  }, [agendaMode, selectedId, view]);
+
   const checkedCount = checkedIds.length;
   const progress = useMemo(
     () => Math.round((checkedCount / tripChecklist.length) * 100),
@@ -139,15 +147,29 @@ export function TripClient() {
     );
   }
 
-  function selectStop(id: string, nextView: TripView = "map") {
+  function selectStop(id: string) {
     setSelectedId(id);
-    setView(nextView);
   }
 
-  function moveSelection(offset: number, nextView: TripView = view) {
+  function openStopDetail(id: string) {
+    setSelectedId(id);
+    setView("agenda");
+    setAgendaMode("detail");
+  }
+
+  function moveSelection(offset: number, nextMode: AgendaMode = "detail") {
     const nextIndex =
       (selectedIndex + offset + tripStops.length) % tripStops.length;
-    selectStop(tripStops[nextIndex].id, nextView);
+    openStopDetail(tripStops[nextIndex].id);
+    setAgendaMode(nextMode);
+  }
+
+  function handleViewChange(next: string) {
+    const nextView = next as TripView;
+    setView(nextView);
+    if (nextView === "agenda" && view !== "agenda") {
+      setAgendaMode("overview");
+    }
   }
 
   return (
@@ -164,7 +186,7 @@ export function TripClient() {
 
       <Tabs
         value={view}
-        onValueChange={(next) => setView(next as TripView)}
+        onValueChange={handleViewChange}
         className="contents"
       >
         <div className="absolute inset-0 z-0">
@@ -192,13 +214,13 @@ export function TripClient() {
                 stop={stop}
                 index={index}
                 selected={stop.id === selectedStop.id}
-                onSelect={() => selectStop(stop.id)}
+                onSelect={() => openStopDetail(stop.id)}
               />
             ))}
             <MausiMapSticker
               selectedStop={selectedStop}
               selectedIndex={selectedIndex}
-              onAdvance={() => moveSelection(1, "map")}
+              onAdvance={() => moveSelection(1)}
             />
             <MapControls
               position="top-right"
@@ -211,33 +233,8 @@ export function TripClient() {
         </div>
 
         <div className="pointer-events-none relative z-10 flex h-full min-h-0 flex-col p-3 sm:p-4 lg:p-6">
-          <div className="pointer-events-auto flex flex-wrap items-start justify-between gap-3">
-            <div className="overflow-hidden rounded-lg border border-[#ffd2e1] bg-white/90 shadow-sm backdrop-blur dark:border-border dark:bg-background/82">
-              <div className="flex items-center gap-2 px-3 pt-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#ff4f8b]">
-                <Sparkles className="size-3.5" />
-                Geburtstagsreise
-              </div>
-              <div className="px-3 pb-2 pt-1">
-                <h1 className="text-lg font-semibold tracking-tight sm:text-xl">
-                  Mausi in Puntaldia
-                </h1>
-                <p className="text-xs font-medium text-slate-500 dark:text-muted-foreground">
-                  {tripMap.base}
-                </p>
-              </div>
-            </div>
-
-            <TabsList className="grid h-9 w-full max-w-full grid-cols-4 border border-[#ffd2e1] bg-white/92 shadow-sm ring-1 ring-[#ff8ab3]/15 backdrop-blur dark:bg-card/88 dark:ring-white/10 min-[390px]:inline-flex min-[390px]:w-fit">
-              <TabsTrigger
-                value="map"
-                aria-label="Karte"
-                className="min-w-0 px-1.5 min-[390px]:px-2.5 sm:px-3"
-              >
-                <MapIcon className="size-4" />
-                <span className="sr-only min-[390px]:not-sr-only">
-                  Karte
-                </span>
-              </TabsTrigger>
+          <div className="pointer-events-auto flex justify-center md:justify-end">
+            <TabsList className="grid h-9 w-full max-w-full grid-cols-3 border border-[#ffd2e1] bg-white/92 shadow-sm ring-1 ring-[#ff8ab3]/15 backdrop-blur dark:bg-card/88 dark:ring-white/10 min-[390px]:inline-flex min-[390px]:w-fit">
               <TabsTrigger
                 value="agenda"
                 aria-label="Agenda"
@@ -246,16 +243,6 @@ export function TripClient() {
                 <CalendarDays className="size-4" />
                 <span className="sr-only min-[390px]:not-sr-only">
                   Agenda
-                </span>
-              </TabsTrigger>
-              <TabsTrigger
-                value="bookings"
-                aria-label="Buchen"
-                className="min-w-0 px-1.5 min-[390px]:px-2.5 sm:px-3"
-              >
-                <ClipboardList className="size-4" />
-                <span className="sr-only min-[390px]:not-sr-only">
-                  Buchen
                 </span>
               </TabsTrigger>
               <TabsTrigger
@@ -268,27 +255,36 @@ export function TripClient() {
                   Pass
                 </span>
               </TabsTrigger>
+              <TabsTrigger
+                value="bookings"
+                aria-label="Buchen"
+                className="min-w-0 px-1.5 min-[390px]:px-2.5 sm:px-3"
+              >
+                <ClipboardList className="size-4" />
+                <span className="sr-only min-[390px]:not-sr-only">
+                  Buchen
+                </span>
+              </TabsTrigger>
             </TabsList>
           </div>
 
-          <aside className="pointer-events-auto mt-auto flex min-h-0 max-h-[62dvh] flex-col overflow-hidden rounded-lg border border-[#ffd2e1] bg-white/95 shadow-[0_20px_70px_rgba(255,95,147,0.16)] backdrop-blur-xl dark:border-border dark:bg-card/94 md:mb-auto md:mt-6 md:w-[480px] md:max-h-[calc(100dvh-150px)] lg:w-[500px]">
-            <div className="min-h-0 flex-1 overflow-y-auto p-4 pb-6 md:p-5 md:pb-6">
-              {view === "map" && (
-                <MapPanel
-                  selectedStop={selectedStop}
-                  selectedIndex={selectedIndex}
-                  onPrevious={() => moveSelection(-1, "map")}
-                  onNext={() => moveSelection(1, "map")}
-                  onSelectStop={selectStop}
-                />
-              )}
+          <aside className="pointer-events-auto mt-auto flex min-h-0 max-h-[66dvh] flex-col overflow-hidden rounded-lg border border-[#ffd2e1] bg-white/95 shadow-[0_20px_70px_rgba(255,95,147,0.16)] backdrop-blur-xl dark:border-border dark:bg-card/94 md:mb-auto md:mt-4 md:w-[480px] md:max-h-[calc(100dvh-110px)] lg:w-[500px]">
+            <div
+              ref={panelScrollRef}
+              className="min-h-0 flex-1 overflow-y-auto p-4 pb-6 md:p-5 md:pb-6"
+            >
+              <TripPanelHeader />
 
               {view === "agenda" && (
-                <AgendaPanel
+                <AgendaMapPanel
+                  mode={agendaMode}
                   selectedId={selectedStop.id}
                   selectedIndex={selectedIndex}
-                  onAdvance={() => moveSelection(1, "agenda")}
-                  onSelectStop={(id) => selectStop(id, "map")}
+                  onAdvance={() => moveSelection(1)}
+                  onPrevious={() => moveSelection(-1)}
+                  onOpenDetail={openStopDetail}
+                  onBackToOverview={() => setAgendaMode("overview")}
+                  onSelectStop={selectStop}
                 />
               )}
 
@@ -311,6 +307,54 @@ export function TripClient() {
         <BoardingPassIntro onOpen={() => setHasOpenedPass(true)} />
       )}
     </main>
+  );
+}
+
+function TripPanelHeader() {
+  const [burst, setBurst] = useState(0);
+
+  return (
+    <div className="mb-4 overflow-hidden rounded-lg border border-[#ffd2e1] bg-[linear-gradient(135deg,#fff7fb,#effbff)] p-3 shadow-sm dark:border-border dark:bg-card">
+      <div className="flex items-center gap-3">
+        <div className="min-w-0 flex-1 text-center sm:text-left">
+          <div className="inline-flex items-center gap-1.5 text-[0.68rem] font-bold uppercase tracking-[0.18em] text-[#ff4f8b]">
+            <Sparkles className="size-3.5" />
+            Geburtstagsreise
+          </div>
+          <h1 className="mt-1 text-xl font-semibold tracking-tight">
+            Mausi in Puntaldia
+          </h1>
+          <p className="mt-0.5 truncate text-xs font-medium text-slate-500 dark:text-muted-foreground">
+            {tripMap.base}
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setBurst((current) => current + 1)}
+          className="group relative grid size-12 shrink-0 place-items-center rounded-full border border-[#ffd2e1] bg-white/88 shadow-sm transition hover:-rotate-3 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#ff5f93] sm:size-14"
+          aria-label="Mausi Glücksbutton"
+          title="Mausi Glücksbutton"
+        >
+          <span
+            key={burst}
+            className={cn(
+              "pointer-events-none absolute -right-1 -top-1 text-sm text-[#ff5f93] opacity-0",
+              burst > 0 && "animate-ping opacity-100",
+            )}
+            aria-hidden
+          >
+            ♥
+          </span>
+          <Image
+            src={tripStickerSrc}
+            alt=""
+            width={56}
+            height={84}
+            className="h-auto w-7 drop-shadow-[0_8px_12px_rgba(199,46,104,0.22)] transition group-hover:-translate-y-0.5 sm:w-8"
+          />
+        </button>
+      </div>
+    </div>
   );
 }
 
@@ -680,23 +724,47 @@ function MausiMapSticker({
   );
 }
 
-function MapPanel({
+function DayDetailPanel({
   selectedStop,
   selectedIndex,
   onPrevious,
   onNext,
+  onBackToOverview,
   onSelectStop,
 }: {
   selectedStop: TripStop;
   selectedIndex: number;
   onPrevious: () => void;
   onNext: () => void;
-  onSelectStop: (id: string, view?: TripView) => void;
+  onBackToOverview: () => void;
+  onSelectStop: (id: string) => void;
 }) {
   const Icon = typeIcons[selectedStop.type];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
+      <div className="flex items-center justify-between gap-3">
+        <Button
+          type="button"
+          size="sm"
+          variant="ghost"
+          onClick={onBackToOverview}
+          className="-ml-2 text-slate-600 hover:text-slate-950"
+        >
+          <ChevronLeft className="size-4" />
+          Agenda
+        </Button>
+        <Badge
+          variant="outline"
+          className="border-[#ff8ab3]/40 bg-[#fff2f7] text-[#c72e68]"
+        >
+          <CalendarDays className="size-3" />
+          {selectedStop.day}
+        </Badge>
+      </div>
+
+      <DayJumpRail selectedId={selectedStop.id} onSelectStop={onSelectStop} />
+
       <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm dark:border-border dark:bg-background">
         <div className="relative aspect-[1.55]">
           <Image
@@ -800,8 +868,39 @@ function MapPanel({
           </div>
         </div>
       </div>
+    </div>
+  );
+}
 
-      <HotspotList selectedStop={selectedStop} onSelectStop={onSelectStop} />
+function DayJumpRail({
+  selectedId,
+  onSelectStop,
+}: {
+  selectedId: string;
+  onSelectStop: (id: string) => void;
+}) {
+  return (
+    <div className="-mx-1 flex gap-1.5 overflow-x-auto px-1 pb-1">
+      {tripStops.map((stop, index) => {
+        const active = stop.id === selectedId;
+        return (
+          <button
+            key={stop.id}
+            type="button"
+            onClick={() => onSelectStop(stop.id)}
+            className={cn(
+              "grid size-9 shrink-0 place-items-center rounded-full border text-xs font-semibold shadow-sm transition",
+              active
+                ? "border-[#ff5f93] bg-[#ff5f93] text-white"
+                : "border-[#ffd2e1] bg-white text-slate-600 hover:border-[#ff8ab3]",
+            )}
+            aria-label={`${stop.day} öffnen`}
+            title={stop.title}
+          >
+            {index + 1}
+          </button>
+        );
+      })}
     </div>
   );
 }
@@ -846,75 +945,41 @@ function MausiJourneyCue({
   );
 }
 
-function HotspotList({
-  selectedStop,
-  onSelectStop,
-}: {
-  selectedStop: TripStop;
-  onSelectStop: (id: string, view?: TripView) => void;
-}) {
-  return (
-    <div className="space-y-2">
-      <div className="flex items-center justify-between gap-3 text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-muted-foreground">
-        <span>Woche</span>
-        <span>Resort + Highlights</span>
-      </div>
-      <div className="grid gap-2">
-        {tripStops.map((stop, index) => {
-          const Icon = typeIcons[stop.type];
-          const active = stop.id === selectedStop.id;
-
-          return (
-            <button
-              key={stop.id}
-              type="button"
-              onClick={() => onSelectStop(stop.id)}
-              className={cn(
-                "flex min-h-12 items-center gap-3 rounded-lg border px-3 text-left text-sm transition hover:border-slate-300 hover:bg-slate-50 dark:hover:bg-muted/50",
-                active
-                  ? "border-[#ff8ab3]/45 bg-[#fff2f7] dark:bg-[#a9443d]/10"
-                  : "border-slate-200 bg-white dark:border-border dark:bg-background",
-              )}
-            >
-              <span
-                className={cn(
-                  "grid size-7 shrink-0 place-items-center rounded-full text-[0.72rem] font-semibold ring-1",
-                  active
-                    ? "bg-[#ff5f93] text-white ring-[#ff5f93]"
-                    : "bg-slate-100 text-slate-700 ring-slate-200 dark:bg-muted dark:text-muted-foreground dark:ring-border",
-                )}
-              >
-                {index + 1}
-              </span>
-              <span className="min-w-0 flex-1">
-                <span className="block truncate font-medium">
-                  {stop.title}
-                </span>
-                <span className="block truncate text-xs text-slate-500 dark:text-muted-foreground">
-                  {stop.place}
-                </span>
-              </span>
-              <Icon className="size-4 shrink-0 text-slate-500" />
-            </button>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-function AgendaPanel({
+function AgendaMapPanel({
+  mode,
   selectedId,
   selectedIndex,
   onAdvance,
+  onPrevious,
+  onOpenDetail,
+  onBackToOverview,
   onSelectStop,
 }: {
+  mode: AgendaMode;
   selectedId: string;
   selectedIndex: number;
   onAdvance: () => void;
+  onPrevious: () => void;
+  onOpenDetail: (id: string) => void;
+  onBackToOverview: () => void;
   onSelectStop: (id: string) => void;
 }) {
   const selectedStop = tripStops[selectedIndex] ?? tripStops[0];
+
+  if (mode === "detail") {
+    return (
+      <DayDetailPanel
+        selectedStop={selectedStop}
+        selectedIndex={selectedIndex}
+        onPrevious={onPrevious}
+        onNext={onAdvance}
+        onBackToOverview={onBackToOverview}
+        onSelectStop={(id) => {
+          onSelectStop(id);
+        }}
+      />
+    );
+  }
 
   return (
     <div className="space-y-4">
@@ -953,7 +1018,9 @@ function AgendaPanel({
             type="button"
             size="sm"
             variant="secondary"
-            onClick={onAdvance}
+            onClick={() => {
+              onAdvance();
+            }}
             className="shrink-0 border border-[#ffd2e1] bg-white/80 text-[#c72e68] hover:bg-white"
           >
             Weiter
@@ -964,13 +1031,13 @@ function AgendaPanel({
 
       <div className="relative">
         <svg
-          className="absolute bottom-8 left-3 top-7 w-14 overflow-visible text-[#ff5f93]/72"
-          viewBox="0 0 56 520"
+          className="absolute bottom-10 left-3 top-7 w-14 overflow-visible text-[#ff5f93]/72"
+          viewBox="0 0 56 1000"
           preserveAspectRatio="none"
           aria-hidden
         >
           <path
-            d="M27 0 C49 36 9 62 29 98 C49 134 53 164 24 190 C-5 216 8 250 33 265 C55 278 52 318 29 340 C8 360 23 406 31 434 C40 465 12 488 29 520"
+            d="M27 0 C49 65 8 110 29 178 C50 244 52 300 24 356 C-6 416 9 480 34 518 C56 552 51 624 28 678 C7 728 24 804 31 862 C39 930 13 958 29 1000"
             fill="none"
             stroke="currentColor"
             strokeDasharray="5 8"
@@ -978,7 +1045,7 @@ function AgendaPanel({
             strokeWidth="3"
           />
           <path
-            d="M31 154 C49 154 49 180 31 180 C13 180 13 154 31 154"
+            d="M31 292 C49 292 49 340 31 340 C13 340 13 292 31 292"
             fill="none"
             stroke="currentColor"
             strokeDasharray="4 7"
@@ -994,7 +1061,7 @@ function AgendaPanel({
               <button
                 key={stop.id}
                 type="button"
-                onClick={() => onSelectStop(stop.id)}
+                onClick={() => onOpenDetail(stop.id)}
                 className={cn(
                   "relative grid min-h-28 w-full grid-cols-[2.75rem_4.75rem_1fr] gap-3 rounded-lg border bg-white p-3 text-left shadow-sm transition dark:bg-background",
                   active
@@ -1154,6 +1221,76 @@ function BookingsPanel({
 }
 
 function PassPanel() {
+  const passRef = useRef<HTMLDivElement>(null);
+  const [isExporting, setIsExporting] = useState(false);
+
+  async function renderPassImage() {
+    if (!passRef.current) return null;
+    const { toPng } = await import("html-to-image");
+    return toPng(passRef.current, {
+      backgroundColor: "#fff8fb",
+      cacheBust: true,
+      pixelRatio: 2,
+    });
+  }
+
+  async function downloadPass() {
+    setIsExporting(true);
+    try {
+      const dataUrl = await renderPassImage();
+      if (!dataUrl) return;
+      const link = document.createElement("a");
+      link.href = dataUrl;
+      link.download = "mausi-birthday-pass.png";
+      link.click();
+    } finally {
+      setIsExporting(false);
+    }
+  }
+
+  async function printPass() {
+    setIsExporting(true);
+    try {
+      const dataUrl = await renderPassImage();
+      if (!dataUrl) return;
+      const printWindow = window.open("", "_blank", "width=900,height=700");
+      if (!printWindow) return;
+      printWindow.document.write(`
+        <!doctype html>
+        <html>
+          <head>
+            <title>Mausi Birthday Pass</title>
+            <style>
+              body {
+                margin: 0;
+                min-height: 100vh;
+                display: grid;
+                place-items: center;
+                background: #fff8fb;
+              }
+              img {
+                width: min(92vw, 720px);
+                height: auto;
+              }
+              @media print {
+                body { background: white; }
+                img { width: 100%; max-width: 720px; }
+              }
+            </style>
+          </head>
+          <body>
+            <img src="${dataUrl}" alt="Mausi Birthday Pass" />
+          </body>
+        </html>
+      `);
+      printWindow.document.close();
+      printWindow.focus();
+      window.setTimeout(() => printWindow.print(), 250);
+    } finally {
+      setIsExporting(false);
+    }
+  }
+
   return (
     <div className="space-y-4">
       <div>
@@ -1173,7 +1310,32 @@ function PassPanel() {
       </div>
 
       <MausiSceneCard />
-      <BirthdayPassCard />
+      <div ref={passRef}>
+        <BirthdayPassCard />
+      </div>
+
+      <div className="grid grid-cols-2 gap-2">
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={downloadPass}
+          disabled={isExporting}
+          className="border border-[#ffd2e1] bg-white/88 text-[#c72e68] hover:bg-white"
+        >
+          <Download className="size-4" />
+          Download
+        </Button>
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={printPass}
+          disabled={isExporting}
+          className="border border-[#ffd2e1] bg-white/88 text-[#c72e68] hover:bg-white"
+        >
+          <Printer className="size-4" />
+          Drucken
+        </Button>
+      </div>
     </div>
   );
 }
