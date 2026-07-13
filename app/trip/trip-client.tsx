@@ -274,7 +274,7 @@ export function TripClient() {
             </TabsList>
           </div>
 
-          <aside className="pointer-events-auto mt-auto flex min-h-0 max-h-[66dvh] flex-col overflow-hidden rounded-lg border border-[#ffd2e1] bg-white/95 shadow-[0_20px_70px_rgba(255,95,147,0.16)] backdrop-blur-xl dark:border-border dark:bg-card/94 md:mb-auto md:mt-4 md:w-[480px] md:max-h-[calc(100dvh-110px)] lg:w-[500px]">
+          <aside className="pointer-events-auto mt-3 flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-[#ffd2e1] bg-white/95 shadow-[0_20px_70px_rgba(255,95,147,0.16)] backdrop-blur-xl dark:border-border dark:bg-card/94 md:mt-4 md:w-[480px] lg:w-[500px]">
             <div
               ref={panelScrollRef}
               className="min-h-0 flex-1 overflow-y-auto p-4 pb-6 md:p-5 md:pb-6"
