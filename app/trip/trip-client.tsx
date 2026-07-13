@@ -1050,14 +1050,6 @@ function AgendaMapPanel({
             strokeLinecap="round"
             strokeWidth="3"
           />
-          <path
-            d="M31 292 C49 292 49 340 31 340 C13 340 13 292 31 292"
-            fill="none"
-            stroke="currentColor"
-            strokeDasharray="4 7"
-            strokeLinecap="round"
-            strokeWidth="2"
-          />
         </svg>
 
         <div className="space-y-3">
