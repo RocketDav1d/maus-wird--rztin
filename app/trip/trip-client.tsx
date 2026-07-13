@@ -239,7 +239,7 @@ export function TripClient() {
         </div>
 
         <div className="pointer-events-none relative z-10 flex h-full min-h-0 flex-col p-3 sm:p-4 lg:p-6">
-          <div className="pointer-events-auto flex justify-center md:justify-end">
+          <div className="pointer-events-auto absolute inset-x-3 top-3 z-20 flex justify-center sm:inset-x-4 sm:top-4 lg:inset-x-auto lg:right-6 lg:top-6 lg:justify-end">
             <TabsList className="grid h-11 w-full max-w-full grid-cols-3 border border-[#ffd2e1] bg-white/92 shadow-sm ring-1 ring-[#ff8ab3]/15 backdrop-blur dark:bg-card/88 dark:ring-white/10 min-[390px]:inline-flex min-[390px]:w-fit md:h-9">
               <TabsTrigger
                 value="agenda"
@@ -274,7 +274,7 @@ export function TripClient() {
             </TabsList>
           </div>
 
-          <aside className="pointer-events-auto mt-3 flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-[#ffd2e1] bg-white/95 shadow-[0_20px_70px_rgba(255,95,147,0.16)] backdrop-blur-xl dark:border-border dark:bg-card/94 md:mt-4 md:w-[480px] lg:w-[500px]">
+          <aside className="pointer-events-auto mt-14 flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-[#ffd2e1] bg-white/95 shadow-[0_20px_70px_rgba(255,95,147,0.16)] backdrop-blur-xl dark:border-border dark:bg-card/94 md:w-[480px] lg:mt-0 lg:w-[500px]">
             <div
               ref={panelScrollRef}
               className="min-h-0 flex-1 overflow-y-auto p-4 pb-6 md:p-5 md:pb-6"
