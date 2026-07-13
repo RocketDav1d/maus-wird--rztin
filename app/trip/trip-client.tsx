@@ -76,7 +76,13 @@ const priorityStyles: Record<TripBooking["priority"], string> = {
   flex: "border-[#90d7e8]/45 bg-[#f1fbfd] text-[#237085]",
 };
 
-const mausiSceneTags = ["Due Lune", "Tavolara", "Spa"];
+const priorityLabels: Record<TripBooking["priority"], string> = {
+  hoch: "zuerst",
+  mittel: "planen",
+  flex: "flexibel",
+};
+
+const mausiSceneTags = ["Puntaldia", "Tavolara", "Mausi"];
 const mausiMarkerOffset: [number, number] = [0, -32];
 const tripMapStyles = {
   dark: "https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json",
@@ -130,7 +136,7 @@ export function TripClient() {
   }, [checkedIds, hasLoadedChecklist]);
 
   useEffect(() => {
-    panelScrollRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+    panelScrollRef.current?.scrollTo({ top: 0, behavior: "auto" });
   }, [agendaMode, selectedId, view]);
 
   const checkedCount = checkedIds.length;
@@ -233,8 +239,8 @@ export function TripClient() {
         </div>
 
         <div className="pointer-events-none relative z-10 flex h-full min-h-0 flex-col p-3 sm:p-4 lg:p-6">
-          <div className="pointer-events-auto flex justify-center md:justify-end">
-            <TabsList className="grid h-9 w-full max-w-full grid-cols-3 border border-[#ffd2e1] bg-white/92 shadow-sm ring-1 ring-[#ff8ab3]/15 backdrop-blur dark:bg-card/88 dark:ring-white/10 min-[390px]:inline-flex min-[390px]:w-fit">
+          <div className="pointer-events-auto absolute inset-x-3 top-3 z-20 flex justify-center sm:inset-x-4 sm:top-4 lg:inset-x-auto lg:right-6 lg:top-6 lg:justify-end">
+            <TabsList className="grid h-11 w-full max-w-full grid-cols-3 border border-[#ffd2e1] bg-white/92 shadow-sm ring-1 ring-[#ff8ab3]/15 backdrop-blur dark:bg-card/88 dark:ring-white/10 min-[390px]:inline-flex min-[390px]:w-fit md:h-9">
               <TabsTrigger
                 value="agenda"
                 aria-label="Agenda"
@@ -268,7 +274,7 @@ export function TripClient() {
             </TabsList>
           </div>
 
-          <aside className="pointer-events-auto mt-auto flex min-h-0 max-h-[66dvh] flex-col overflow-hidden rounded-lg border border-[#ffd2e1] bg-white/95 shadow-[0_20px_70px_rgba(255,95,147,0.16)] backdrop-blur-xl dark:border-border dark:bg-card/94 md:mb-auto md:mt-4 md:w-[480px] md:max-h-[calc(100dvh-110px)] lg:w-[500px]">
+          <aside className="pointer-events-auto mt-14 flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-[#ffd2e1] bg-white/95 shadow-[0_20px_70px_rgba(255,95,147,0.16)] backdrop-blur-xl dark:border-border dark:bg-card/94 md:w-[480px] lg:mt-0 lg:w-[500px]">
             <div
               ref={panelScrollRef}
               className="min-h-0 flex-1 overflow-y-auto p-4 pb-6 md:p-5 md:pb-6"
@@ -518,10 +524,10 @@ function BoardingPassIntro({ onOpen }: { onOpen: () => void }) {
                   className="relative mx-auto h-auto w-24 drop-shadow-[0_16px_24px_rgba(199,46,104,0.24)] sm:w-28"
                 />
                 <div className="relative mt-2 text-xs font-bold uppercase tracking-[0.22em] text-[#ff4f8b]">
-                  Mausi Map
+                  Sardinien freigeschaltet
                 </div>
                 <div className="relative mt-1 text-2xl font-semibold tracking-tight text-slate-950">
-                  Mausi Map bereit.
+                  Die Mausi-Karte wartet.
                 </div>
               </div>
             </div>
@@ -889,7 +895,7 @@ function DayJumpRail({
             type="button"
             onClick={() => onSelectStop(stop.id)}
             className={cn(
-              "grid size-9 shrink-0 place-items-center rounded-full border text-xs font-semibold shadow-sm transition",
+              "grid size-11 shrink-0 place-items-center rounded-full border text-xs font-semibold shadow-sm transition sm:size-9",
               active
                 ? "border-[#ff5f93] bg-[#ff5f93] text-white"
                 : "border-[#ffd2e1] bg-white text-slate-600 hover:border-[#ff8ab3]",
@@ -925,7 +931,7 @@ function MausiJourneyCue({
       />
       <div className="min-w-0 flex-1">
         <div className="text-[0.68rem] font-bold uppercase tracking-[0.16em] text-[#ff4f8b]">
-          Mausi ist hier
+          Kartenpunkt
         </div>
         <div className="mt-0.5 truncate text-sm font-semibold">
           Tag {selectedIndex + 1}: {selectedStop.place}
@@ -938,7 +944,7 @@ function MausiJourneyCue({
         onClick={onAdvance}
         className="shrink-0 border border-[#ffd2e1] bg-white/80 text-[#c72e68] hover:bg-white"
       >
-        Weiter
+        Nächster Tag
         <ChevronRight className="size-4" />
       </Button>
     </div>
@@ -992,11 +998,11 @@ function AgendaMapPanel({
           7 Nächte · 8 Tage
         </Badge>
         <h2 className="mt-3 text-2xl font-semibold tracking-tight">
-          Resorturlaub mit gesetzten Highlights.
+          Sieben Nächte, ein roter Faden.
         </h2>
         <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-muted-foreground">
-          Drei programmierte Tage, zwei besondere Abende und dazwischen genug
-          Pool, Strand, Lunch und Siesta.
+          Boot, Buchten, Spa und zwei schöne Abende. Dazwischen bleibt Platz
+          für Pool, Strand, Siesta und einfach treiben lassen.
         </p>
         <div className="mt-3 flex items-center gap-3 rounded-lg border border-[#ffd2e1] bg-[#fff2f7] p-2.5 shadow-sm">
           <Image
@@ -1008,7 +1014,7 @@ function AgendaMapPanel({
           />
           <div className="min-w-0 flex-1">
             <div className="text-[0.66rem] font-bold uppercase tracking-[0.16em] text-[#ff4f8b]">
-              Nächster Schritt
+              Gerade auf der Karte
             </div>
             <div className="truncate text-sm font-semibold">
               Tag {selectedIndex + 1}: {selectedStop.title}
@@ -1023,7 +1029,7 @@ function AgendaMapPanel({
             }}
             className="shrink-0 border border-[#ffd2e1] bg-white/80 text-[#c72e68] hover:bg-white"
           >
-            Weiter
+            Öffnen
             <ChevronRight className="size-4" />
           </Button>
         </div>
@@ -1043,14 +1049,6 @@ function AgendaMapPanel({
             strokeDasharray="5 8"
             strokeLinecap="round"
             strokeWidth="3"
-          />
-          <path
-            d="M31 292 C49 292 49 340 31 340 C13 340 13 292 31 292"
-            fill="none"
-            stroke="currentColor"
-            strokeDasharray="4 7"
-            strokeLinecap="round"
-            strokeWidth="2"
           />
         </svg>
 
@@ -1102,7 +1100,7 @@ function AgendaMapPanel({
                     <span className="font-semibold">{stop.day}</span>
                     {active && (
                       <span className="rounded-full bg-[#fff2f7] px-2 py-0.5 text-[0.62rem] font-semibold text-[#c72e68] ring-1 ring-[#ffd2e1]">
-                        Mausi ist hier
+                        gerade hier
                       </span>
                     )}
                     <span className="text-xs font-medium text-slate-500 dark:text-muted-foreground">
@@ -1144,10 +1142,11 @@ function BookingsPanel({
           Buchungen
         </Badge>
         <h2 className="mt-3 text-2xl font-semibold tracking-tight">
-          Erst die knappen Sachen fixieren.
+          Was vorher sitzen sollte.
         </h2>
         <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-muted-foreground">
-          Gusto, Boot und Spa zuerst; Club und Strandlaunen bleiben flexibler.
+          Boot, Spa, Gusto und die Fahrten rechtzeitig fixieren. Der Rest darf
+          nach Wetter, Lust und Abendform rutschen.
         </p>
       </div>
 
@@ -1168,7 +1167,7 @@ function BookingsPanel({
                 variant="outline"
                 className={cn("shrink-0", priorityStyles[booking.priority])}
               >
-                {booking.priority}
+                {priorityLabels[booking.priority]}
               </Badge>
             </div>
             <p className="mt-3 text-sm leading-6 text-slate-600 dark:text-muted-foreground">
@@ -1181,9 +1180,9 @@ function BookingsPanel({
       <div className="rounded-lg border border-slate-200 bg-white p-3 shadow-sm dark:border-border dark:bg-background">
         <div className="flex items-center justify-between gap-3">
           <div>
-            <h3 className="font-semibold">Trip Prep</h3>
+            <h3 className="font-semibold">Packliste & To-dos</h3>
             <p className="text-xs text-slate-500 dark:text-muted-foreground">
-              {checkedCount} von {tripChecklist.length} Dingen.
+              {checkedCount} von {tripChecklist.length} erledigt.
             </p>
           </div>
           <div className="grid size-12 place-items-center rounded-md bg-slate-100 text-sm font-semibold text-slate-800 ring-1 ring-slate-200 dark:bg-muted dark:text-foreground dark:ring-border">
@@ -1302,10 +1301,11 @@ function PassPanel() {
           Birthday Pass
         </Badge>
         <h2 className="mt-3 text-2xl font-semibold tracking-tight">
-          Eine Woche Mausi-Modus.
+          Mausi-Modus zum Mitnehmen.
         </h2>
         <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-muted-foreground">
-          Strand, Boot, Spa, gutes Essen und ein Abend, der spät werden darf.
+          Zum Downloaden, Drucken und Einstecken: der kleine Pass für eine
+          Woche Sardinien zu zweit.
         </p>
       </div>
 
@@ -1370,7 +1370,7 @@ function MausiSceneCard() {
       />
       <div className="absolute bottom-5 left-4 max-w-56">
         <div className="text-xs font-bold uppercase tracking-[0.2em] text-[#ff4f8b]">
-          Mausi Map
+          Sardinien-Schnipsel
         </div>
         <div className="mt-1 text-2xl font-semibold tracking-tight text-slate-950">
           Kleine Schatzkarte für Sardinien.
