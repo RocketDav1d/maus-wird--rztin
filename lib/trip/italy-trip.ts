@@ -50,24 +50,6 @@ export const tripMap = {
   zoom: 10.15,
 };
 
-export const tripHeroImages = [
-  {
-    src: "/trip/cala-water.jpg",
-    alt: "Klares sardisches Wasser an einem Strand",
-    label: "Tavolara-Blau",
-  },
-  {
-    src: "/trip/la-maddalena-pool.jpg",
-    alt: "Getränke am Pool mit Felsen und Meer in La Maddalena",
-    label: "Resort-Ruhe",
-  },
-  {
-    src: "/trip/sardinia-coast.jpg",
-    alt: "Sardische Küste mit Insel und klarem Wasser",
-    label: "Inselblick",
-  },
-];
-
 export const tripStops: TripStop[] = [
   {
     id: "due-lune",
@@ -230,8 +212,8 @@ export const tripStops: TripStop[] = [
     place: "Due Lune · Baglioni Resort",
     type: "spa",
     pace: "luxus, aber ruhig",
-    lng: 9.706,
-    lat: 40.786,
+    lng: 9.6761,
+    lat: 40.8219,
     eyebrow: "Private Spa, Paarmassage, Fine Dining",
     summary:
       "Der bewusst gesetzte Luxustag: tagsüber fast nichts, nachmittags Spa und abends ein besonderes Dinner mit festem NCC.",
@@ -384,7 +366,7 @@ export const tripRouteCoordinates: [number, number][] = [
   [9.6888, 40.8148],
   [9.728, 40.891],
   [9.7105, 40.8334],
-  [9.706, 40.786],
+  [9.6761, 40.8219],
   [9.673, 40.773],
   [9.611, 40.875],
   [9.5176, 40.8987],
@@ -398,12 +380,6 @@ export const tripChecklist = [
   { id: "club", label: "Bal Harbour / Luna Glam Kalender" },
   { id: "portolano", label: "Il Portolano Außentisch" },
   { id: "car", label: "1 Mietwagentag mit Hotelzustellung" },
-];
-
-export const tripStats = [
-  { label: "Nächte", value: "7" },
-  { label: "Basis", value: "Due Lune" },
-  { label: "Modus", value: "Resort +" },
 ];
 
 export const tripBookings: TripBooking[] = [
@@ -448,24 +424,5 @@ export const tripBookings: TripBooking[] = [
     timing: "Tag 7 · 20:00",
     priority: "mittel",
     note: "Außentisch mit Tavolara-Blick anfragen.",
-  },
-];
-
-export const tripSources = [
-  {
-    label: "Due Lune Puntaldia Resort & Golf",
-    href: "https://www.duelune.com/de/",
-  },
-  {
-    label: "San Teodoro Turismo",
-    href: "https://santeodoroturismo.it/",
-  },
-  {
-    label: "Michelin Guide",
-    href: "https://guide.michelin.com/",
-  },
-  {
-    label: "Unsplash Sardinia images",
-    href: "https://unsplash.com/s/photos/sardinia",
   },
 ];

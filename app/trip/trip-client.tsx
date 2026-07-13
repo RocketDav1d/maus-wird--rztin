@@ -44,11 +44,8 @@ import { cn } from "@/lib/utils";
 import {
   tripBookings,
   tripChecklist,
-  tripHeroImages,
   tripMap,
   tripRouteCoordinates,
-  tripSources,
-  tripStats,
   tripStickerSrc,
   tripStops,
   type TripBooking,
@@ -1153,60 +1150,6 @@ function PassPanel() {
 
       <MausiSceneCard />
       <BirthdayPassCard />
-
-      <div className="grid grid-cols-3 gap-2">
-        {tripStats.map((stat) => (
-          <div
-            key={stat.label}
-            className="rounded-lg border border-[#ffd2e1] bg-white p-3 shadow-sm dark:border-border dark:bg-background"
-          >
-            <div className="text-lg font-semibold tracking-tight">
-              {stat.value}
-            </div>
-            <div className="mt-1 text-[0.66rem] font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-muted-foreground">
-              {stat.label}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="grid gap-2">
-        {tripHeroImages.map((image) => (
-          <div
-            key={image.src}
-            className="relative min-h-24 overflow-hidden rounded-lg border border-[#ffd2e1] bg-white shadow-sm dark:border-border"
-          >
-            <Image
-              src={image.src}
-              alt={image.alt}
-              fill
-              sizes="430px"
-              className="object-cover"
-            />
-            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(46,23,51,0.58),rgba(255,95,147,0.12))]" />
-            <div className="absolute bottom-3 left-3 text-sm font-semibold text-white">
-              {image.label}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="rounded-lg border border-[#ffd2e1] bg-white p-3 text-xs leading-5 text-slate-500 shadow-sm dark:border-border dark:bg-background dark:text-muted-foreground">
-        Quellen für Plan und Bildauswahl:{" "}
-        {tripSources.map((source, index) => (
-          <span key={source.href}>
-            <a
-              href={source.href}
-              className="font-medium text-slate-700 underline-offset-4 hover:underline dark:text-foreground"
-              target="_blank"
-              rel="noreferrer"
-            >
-              {source.label}
-            </a>
-            {index < tripSources.length - 1 ? ", " : "."}
-          </span>
-        ))}
-      </div>
     </div>
   );
 }
