@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Plus } from "lucide-react";
+import { Home, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SignOutButton } from "@/components/sign-out-button";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -10,7 +10,7 @@ export function AppHeader() {
     <header className="border-b">
       <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 py-3 flex items-center justify-between gap-2 sm:gap-4">
         <Link
-          href="/"
+          href="/doctor"
           className="flex items-center gap-2 font-semibold tracking-tight hover:opacity-80 transition-opacity min-w-0 whitespace-nowrap"
         >
           <span className="truncate">
@@ -25,7 +25,12 @@ export function AppHeader() {
         </Link>
         <nav className="flex items-center gap-1 shrink-0">
           <Button asChild variant="ghost" size="sm" className="hidden lg:inline-flex">
-            <Link href="/">Karteikarten Sets</Link>
+            <Link href="/doctor">Karteikarten Sets</Link>
+          </Button>
+          <Button asChild variant="ghost" size="icon-sm" title="Apps">
+            <Link href="/" aria-label="Apps">
+              <Home className="size-4" />
+            </Link>
           </Button>
           <Button asChild size="sm" aria-label="Neues Set">
             <Link href="/decks/new">

@@ -5,7 +5,7 @@ import { auth } from "@/auth";
 import { LoginForm } from "./login-form";
 
 export const metadata = {
-  title: "Anmelden · Mausi wird Ärztin",
+  title: "Anmelden · Mausi App",
 };
 
 export default async function LoginPage({
@@ -30,7 +30,8 @@ export default async function LoginPage({
         />
         <Card className="w-full">
           <CardHeader className="space-y-1.5 text-center">
-            <CardTitle className="text-2xl">Mausi wird Ärztin 🐭</CardTitle>
+            <CardTitle className="text-2xl">Mausi App</CardTitle>
+            <CardDescription>Ein Passwort, zwei kleine Welten.</CardDescription>
           </CardHeader>
           <CardContent>
             <LoginForm

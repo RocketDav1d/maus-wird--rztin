@@ -15,8 +15,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://mausiii.com";
-const siteTitle = "Mausi wird Ärztin 🐭";
-const siteDescription = "Süßes Prüfungstraining für meine Mausi.";
+const siteTitle = "Mausi App";
+const siteDescription = "Lernen, Reisen und kleine Überraschungen für Mausi.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
